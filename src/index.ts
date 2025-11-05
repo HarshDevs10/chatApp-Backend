@@ -27,7 +27,7 @@ wss.on('connection', (Socket) => {
             const roomId = ele.room
 
             allSocket.forEach((e) => {
-                if(e.room === roomId){
+                if(e.room === roomId && e.socket != Socket){
                     e.socket.send(ParsedMessage.payload.message)
                 }
             })
