@@ -10,6 +10,9 @@
     "module": "es2020",
     "target": "esnext",
     "types": [],
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],

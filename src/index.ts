@@ -1,11 +1,8 @@
 import { WebSocketServer, WebSocket } from "ws";
+import { ObjectCounting } from "./ObjectCounting.js";
+import type { User } from "./UserInterface.js";
 
 const wss = new WebSocketServer({ port: 8000})
-
-interface User {
-    socket: WebSocket
-    room: string
-}
 let allSocket: User[] = []
 
 wss.on('connection', (Socket) => {
@@ -14,6 +11,15 @@ wss.on('connection', (Socket) => {
         const ParsedMessage = JSON.parse(message.toString())
 
         if(ParsedMessage.type === "join"){
+            const inc = allSocket.some(x => x.room === ParsedMessage.payload.roomId)
+            if(inc){
+                allSocket.forEach((e) => {
+                    if(e.room === ParsedMessage.payload.roomId){
+                        const num = ObjectCounting(allSocket, ParsedMessage.payload.roomId)
+                        e.socket.send(num.toString())
+                    }
+                })
+            }
             allSocket.push({
                 socket: Socket,
                 room: ParsedMessage.payload.roomId
